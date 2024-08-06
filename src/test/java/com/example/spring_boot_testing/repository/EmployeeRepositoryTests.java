@@ -195,7 +195,7 @@ public class EmployeeRepositoryTests {
     // JUnit test for custom query using JPQL with index params
     @Test
     @DisplayName("JUnit test for custom query using JPQL with index params")
-    public void givenFirstNameAndLastName_whenFindByJPQL_thenReturnEmployeeObject() {
+    public void givenFirstNameAndLastName_whenFindByJPQLIndexParams_thenReturnEmployeeObject() {
 
         // given - precondition or setup
         Employee employee = Employee.builder()
@@ -209,7 +209,31 @@ public class EmployeeRepositoryTests {
         String lastName = "Ranjbar";
 
         // when - action or the behavior that we are going test
-        Employee savedEmployee = employeeRepository.findByJPQL(firstName,lastName);
+        Employee savedEmployee = employeeRepository.findByJPQLIndexParams(firstName,lastName);
+
+        // then - verify the output
+        Assertions.assertThat(savedEmployee).isNotNull();
+
+    }
+
+    // JUnit test for custom query using JPQL with named params
+    @Test
+    @DisplayName("JUnit test for custom query using JPQL with named params")
+    public void givenFirstNameAndLastName_whenFindByJPQLNamedParams_thenReturnEmployeeObject() {
+
+        // given - precondition or setup
+        Employee employee = Employee.builder()
+                .firstName("Mohammad")
+                .lastName("Ranjbar")
+                .email("mohammadranjbar@gmail.com")
+                .build();
+
+        employeeRepository.save(employee);
+        String firstName = "Mohammad";
+        String lastName = "Ranjbar";
+
+        // when - action or the behavior that we are going test
+        Employee savedEmployee = employeeRepository.findByJPQLNamedParams(firstName,lastName);
 
         // then - verify the output
         Assertions.assertThat(savedEmployee).isNotNull();
