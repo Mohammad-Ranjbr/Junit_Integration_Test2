@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 // import static org.assertj.core.api.Assertions.assertThat;
 
 // Spring Boot provides the @DataJpaTest annotation to test the persistence
@@ -165,6 +166,29 @@ public class EmployeeRepositoryTests {
         Assertions.assertThat(updatedEmployee).isNotNull();
         Assertions.assertThat(updatedEmployee.getEmail()).isEqualTo("mohammadranjbar.mmr81@gmail.com");
         Assertions.assertThat(updatedEmployee.getFirstName()).isEqualTo("Hasan");
+
+    }
+
+    // JUnit test for delete employee operation
+    @Test
+    @DisplayName("JUnit test for delete employee operation")
+    public void givenEmployeeObject_whenDelete_thenRemoveEmployee() {
+
+        // given - precondition or setup
+        Employee employee = Employee.builder()
+                .firstName("Mohammad")
+                .lastName("Ranjbar")
+                .email("mohammadranjbar@gmail.com")
+                .build();
+
+        employeeRepository.save(employee);
+
+        // when - action or the behavior that we are going test
+        employeeRepository.delete(employee);
+        Optional<Employee> deleteEmployee = employeeRepository.findById(employee.getId());
+
+        // then - verify the output
+        Assertions.assertThat(deleteEmployee).isEmpty();
 
     }
 
