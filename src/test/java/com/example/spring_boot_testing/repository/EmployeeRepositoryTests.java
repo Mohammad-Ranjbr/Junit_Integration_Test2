@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Objects;
 // import static org.assertj.core.api.Assertions.assertThat;
 
 // Spring Boot provides the @DataJpaTest annotation to test the persistence
@@ -108,6 +109,62 @@ public class EmployeeRepositoryTests {
 
         // then - verify the output
         Assertions.assertThat(getEmployee).isNotNull();
+
+    }
+
+    // JUnit test for get employee by email operation
+    @Test
+    @DisplayName("JUnit test for get employee by email operation")
+    public void givenEmployeeEmail_whenFindByEmail_thenReturnEmployeeObject() {
+
+        // given - precondition or setup
+        Employee employee = Employee.builder()
+                .firstName("Mohammad")
+                .lastName("Ranjbar")
+                .email("mohammadranjbar@gmail.com")
+                .build();
+
+        employeeRepository.save(employee);
+
+        // when - action or the behavior that we are going test
+        Employee getEmployee = null;
+        if(employeeRepository.findByEmail(employee.getEmail()).isPresent()){
+            getEmployee = employeeRepository.findByEmail(employee.getEmail()).get();
+        }
+
+        // then - verify the output
+        Assertions.assertThat(getEmployee).isNotNull();
+        Assertions.assertThat(getEmployee.getEmail()).isEqualTo("mohammadranjbar@gmail.com");
+
+    }
+
+    // JUnit test for update employee operation
+    @Test
+    @DisplayName("JUnit test for update employee operation")
+    public void givenEmployeeObject_whenUpdateEmployee_thenReturnUpdatedEmployee() {
+
+        // given - precondition or setup
+        Employee employee = Employee.builder()
+                .firstName("Mohammad")
+                .lastName("Ranjbar")
+                .email("mohammadranjbar@gmail.com")
+                .build();
+
+        employeeRepository.save(employee);
+
+        // when - action or the behavior that we are going test
+        Employee getEmployee = null;
+        if(employeeRepository.findByEmail(employee.getEmail()).isPresent()){
+            getEmployee = employeeRepository.findByEmail(employee.getEmail()).get();
+        }
+        Objects.requireNonNull(getEmployee).setEmail("mohammadranjbar.mmr81@gmail.com");
+        getEmployee.setFirstName("Hasan");
+        Employee updatedEmployee = employeeRepository.save(getEmployee);
+
+        // then - verify the output
+        Assertions.assertThat(updatedEmployee).isNotNull();
+        Assertions.assertThat(updatedEmployee.getEmail()).isEqualTo("mohammadranjbar.mmr81@gmail.com");
+        Assertions.assertThat(updatedEmployee.getFirstName()).isEqualTo("Hasan");
 
     }
 
