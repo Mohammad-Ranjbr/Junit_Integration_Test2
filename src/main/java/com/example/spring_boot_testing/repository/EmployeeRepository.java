@@ -21,4 +21,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("select e from Employee e where e.firstName =:firstName and e.lastName =:lastName")
     Employee findByJPQLNamedParams(@Param("firstName") String firstName, @Param("lastName") String lastNAme);
 
+    // define custom query using native SQL with index params
+    @Query(value = "select * from employees e where e.first_Name =?1 and e.last_Name = ?2", nativeQuery = true)
+    Employee findByNativeSQLIndexParams(String firstName, String lastName);
+
 }
