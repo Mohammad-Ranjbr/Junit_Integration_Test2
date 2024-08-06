@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import java.util.List;
 // import static org.assertj.core.api.Assertions.assertThat;
 
 // Spring Boot provides the @DataJpaTest annotation to test the persistence
@@ -13,7 +15,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 // The @DataJpaTest annotation doesn’t load other Spring beans
 // (@Components, @Controller, @Service, and annotated beans) into ApplicationContext.
 // By default, it scans for @Entity classes and configure Spring Data JPA
-// repositories annotated with @Repository annotation By default,
+// repositories annotated with @Repository an notation By default,
 // tests annotated with @DataJpaTest are transactional and roll back at the end of each test.
 
 /* @Test
@@ -51,6 +53,61 @@ public class EmployeeRepositoryTests {
         // then - verify the output
         Assertions.assertThat(savedEmployee).isNotNull();
         Assertions.assertThat(savedEmployee.getId()).isGreaterThan(0);
+
+    }
+
+    // JUnit test for get all employees operation
+    @Test
+    @DisplayName("JUnit test for get all employees operation")
+    public void givenEmployeesList_whenFindAll_thenEmployeesList() {
+
+        // given - precondition or setup
+        Employee employee1 = Employee.builder()
+                .firstName("Mohammad")
+                .lastName("Ranjbar")
+                .email("mohammadranjbar@gmail.com")
+                .build();
+
+        Employee employee2 = Employee.builder()
+                .firstName("Hossein")
+                .lastName("Ranjbar")
+                .email("hosseinranjbar@gmail.com")
+                .build();
+
+        employeeRepository.save(employee1);
+        employeeRepository.save(employee2);
+
+        // when - action or the behavior that we are going test
+        List<Employee> employeeList = employeeRepository.findAll();
+
+        // then - verify the output
+        Assertions.assertThat(employeeList).isNotNull();
+        Assertions.assertThat(employeeList.size()).isEqualTo(2);
+
+    }
+
+    // JUnit test for get employee by id
+    @Test
+    @DisplayName("JUnit test for get employee by id")
+    public void givenEmployeeObject_whenFindById_thenReturnEmployeeObject() {
+
+        // given - precondition or setup
+        Employee employee = Employee.builder()
+                .firstName("Mohammad")
+                .lastName("Ranjbar")
+                .email("mohammadranjbar@gmail.com")
+                .build();
+
+        employeeRepository.save(employee);
+
+        // when - action or the behavior that we are going test
+        Employee getEmployee = null;
+        if(employeeRepository.findById(employee.getId()).isPresent()){
+            getEmployee = employeeRepository.findById(employee.getId()).get();
+        }
+
+        // then - verify the output
+        Assertions.assertThat(getEmployee).isNotNull();
 
     }
 
