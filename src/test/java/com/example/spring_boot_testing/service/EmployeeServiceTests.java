@@ -53,6 +53,7 @@ public class EmployeeServiceTests {
         /*employeeRepository = Mockito.mock(EmployeeRepository.class);
         /employeeService = new EmployeeServiceImpl(employeeRepository);*/
         employee = Employee.builder()
+                .id(1L)
                 .firstName("Mohammad")
                 .lastName("Ranjbar")
                 .email("mohammadranjbar@gmail.com")
@@ -144,6 +145,25 @@ public class EmployeeServiceTests {
         // then - verify the output
         Assertions.assertThat(employeeList.size()).isEqualTo(0);
         Assertions.assertThat(employeeList).isEmpty();
+
+    }
+
+    // JUnit test for getEmployeeById method
+    @Test
+    @DisplayName("JUnit test for getEmployeeById method")
+    public void givenEmployeeId_whenGetEmployeeById_thenReturnEmployeeObject() {
+
+        // given - precondition or setup
+        given(employeeRepository.findById(1L)).willReturn(Optional.of(employee));
+
+        // when - action or the behavior that we are going test
+        Employee savedEmployee = employeeService.getEmployeeById(employee.getId());
+
+        // then - verify the output
+        Assertions.assertThat(savedEmployee).isNotNull();
+        Assertions.assertThat(savedEmployee.getFirstName()).isEqualTo("Mohammad");
+        Assertions.assertThat(savedEmployee.getLastName()).isEqualTo("Ranjbar");
+        Assertions.assertThat(savedEmployee.getEmail()).isEqualTo("mohammadranjbar@gmail.com");
 
     }
 
