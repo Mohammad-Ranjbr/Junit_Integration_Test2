@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
 import java.util.Optional;
 
 // Makes JUnit 5 know to use Mockito to handle mocks. This annotation ensures
@@ -103,6 +104,28 @@ public class EmployeeServiceTests {
 
         // then - verify the output
         verify(employeeRepository,never()).save(any(Employee.class));
+
+    }
+
+    // JUnit test for getAllEmployees method
+    @Test
+    @DisplayName("JUnit test for getAllEmployees method")
+    public void givenEmployeesList_whenGetAllEmployees_thenReturnEmployeeList() {
+
+        // given - precondition or setup
+        Employee employee = Employee.builder()
+                .firstName("Mohammad")
+                .lastName("Ranjbar")
+                .email("mohammadranjbar@gmail.com")
+                .build();
+        given(employeeRepository.findAll()).willReturn(List.of(employee,this.employee));
+
+        // when - action or the behavior that we are going test
+        List<Employee> employeeList = employeeService.getAllEmployees();
+
+        // then - verify the output
+        Assertions.assertThat(employeeList).isNotNull();
+        Assertions.assertThat(employeeList.size()).isEqualTo(2);
 
     }
 
