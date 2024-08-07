@@ -167,4 +167,24 @@ public class EmployeeServiceTests {
 
     }
 
+    // JUnit test for updateEmployee method
+    @Test
+    @DisplayName("JUnit test for updateEmployee method")
+    public void givenEmployeeObject_whenUpdateEmployee_thenReturnUpdatedEmployee() {
+
+        // given - precondition or setup
+        given(employeeRepository.save(employee)).willReturn(employee);
+        employee.setFirstName("Hossein");
+        employee.setEmail("hosseinranjbar.mmr91@gmail.com");
+
+        // when - action or the behavior that we are going test
+        Employee updatedEmployee = employeeService.updateEmployee(employee);
+
+        // then - verify the output
+        Assertions.assertThat(updatedEmployee).isNotNull();
+        Assertions.assertThat(updatedEmployee.getEmail()).isEqualTo("hosseinranjbar.mmr91@gmail.com");
+        Assertions.assertThat(updatedEmployee.getFirstName()).isEqualTo("Hossein");
+
+    }
+
 }
