@@ -19,6 +19,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -107,9 +108,9 @@ public class EmployeeServiceTests {
 
     }
 
-    // JUnit test for getAllEmployees method
+    // JUnit test for getAllEmployees method (positive scenario)
     @Test
-    @DisplayName("JUnit test for getAllEmployees method")
+    @DisplayName("JUnit test for getAllEmployees method (positive scenario)")
     public void givenEmployeesList_whenGetAllEmployees_thenReturnEmployeeList() {
 
         // given - precondition or setup
@@ -126,6 +127,23 @@ public class EmployeeServiceTests {
         // then - verify the output
         Assertions.assertThat(employeeList).isNotNull();
         Assertions.assertThat(employeeList.size()).isEqualTo(2);
+
+    }
+
+    // JUnit test for getAllEmployees method (negative scenario)
+    @Test
+    @DisplayName("JUnit test for getAllEmployees method (negative scenario)")
+    public void givenEmptyEmployeesList_whenGetAllEmployees_thenReturnEmptyEmployeeList() {
+
+        // given - precondition or setup
+        given(employeeRepository.findAll()).willReturn(Collections.emptyList());
+
+        // when - action or the behavior that we are going test
+        List<Employee> employeeList = employeeService.getAllEmployees();
+
+        // then - verify the output
+        Assertions.assertThat(employeeList.size()).isEqualTo(0);
+        Assertions.assertThat(employeeList).isEmpty();
 
     }
 
