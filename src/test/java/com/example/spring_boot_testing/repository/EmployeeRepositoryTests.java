@@ -187,10 +187,10 @@ public class EmployeeRepositoryTests {
 
         // when - action or the behavior that we are going test
         employeeRepository.delete(employee);
-        Optional<Employee> deleteEmployee = employeeRepository.findById(employee.getId());
+        Optional<Employee> deletedEmployee = employeeRepository.findById(employee.getId());
 
         // then - verify the output
-        Assertions.assertThat(deleteEmployee).isEmpty();
+        Assertions.assertThat(deletedEmployee).isEmpty();
 
     }
 

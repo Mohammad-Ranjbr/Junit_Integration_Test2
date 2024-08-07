@@ -12,8 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.*;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -116,11 +116,11 @@ public class EmployeeServiceTests {
 
         // given - precondition or setup
         Employee employee = Employee.builder()
-                .firstName("Mohammad")
-                .lastName("Ranjbar")
-                .email("mohammadranjbar@gmail.com")
+                .firstName("Hossein")
+                .lastName("Aslani")
+                .email("hosseinaslani@gmail.com")
                 .build();
-        given(employeeRepository.findAll()).willReturn(List.of(employee,this.employee));
+        given(employeeRepository.findAll()).willReturn(List.of(this.employee,employee));
 
         // when - action or the behavior that we are going test
         List<Employee> employeeList = employeeService.getAllEmployees();
@@ -128,6 +128,15 @@ public class EmployeeServiceTests {
         // then - verify the output
         Assertions.assertThat(employeeList).isNotNull();
         Assertions.assertThat(employeeList.size()).isEqualTo(2);
+
+        Assertions.assertThat(employeeList.get(0).getFirstName()).isEqualTo("Mohammad");
+        Assertions.assertThat(employeeList.get(0).getLastName()).isEqualTo( "Ranjbar");
+        Assertions.assertThat(employeeList.get(0).getEmail()).isEqualTo("mohammadranjbar@gmail.com");
+
+        // isIn is used to check if a value exists in a set of values. This method checks if a particular value exists in the given set of values.
+        Assertions.assertThat(employeeList.get(1).getFirstName()).isIn("Mohammad","Hossein");
+        Assertions.assertThat(employeeList.get(1).getLastName()).isIn("Aslani", "Ranjbar");
+        Assertions.assertThat(employeeList.get(1).getEmail()).isIn("hosseinaslani@gmail.com", "mohammadranjbar@gmail.com");
 
     }
 
@@ -184,6 +193,22 @@ public class EmployeeServiceTests {
         Assertions.assertThat(updatedEmployee).isNotNull();
         Assertions.assertThat(updatedEmployee.getEmail()).isEqualTo("hosseinranjbar.mmr91@gmail.com");
         Assertions.assertThat(updatedEmployee.getFirstName()).isEqualTo("Hossein");
+
+    }
+
+    // JUnit test for deleteEmployee method
+    @Test
+    @DisplayName("JUnit test for deleteEmployee method")
+    public void givenEmployeeId_whenDeleteEmployee_thenNothing() {
+
+        // given - precondition or setup
+        willDoNothing().given(employeeRepository).deleteById(employee.getId());
+
+        // when - action or the behavior that we are going test
+        employeeService.deleteEmployee(employee.getId());
+
+        // then - verify the output
+        verify(employeeRepository,times(1)).deleteById(employee.getId());
 
     }
 
