@@ -69,6 +69,9 @@ public class EmployeeRepositoryTests {
         // then - verify the output
         Assertions.assertThat(savedEmployee).isNotNull();
         Assertions.assertThat(savedEmployee.getId()).isGreaterThan(0);
+        Assertions.assertThat(savedEmployee.getFirstName()).isEqualTo("Mohammad");
+        Assertions.assertThat(savedEmployee.getLastName()).isEqualTo("Ranjbar");
+        Assertions.assertThat(savedEmployee.getEmail()).isEqualTo("mohammadranjbar@gmail.com");
 
     }
 
@@ -80,8 +83,8 @@ public class EmployeeRepositoryTests {
         // given - precondition or setup
         Employee employee2 = Employee.builder()
                 .firstName("Hossein")
-                .lastName("Ranjbar")
-                .email("hosseinranjbar@gmail.com")
+                .lastName("Aslani")
+                .email("hosseinaslani@gmail.com")
                 .build();
 
         employeeRepository.save(employee);
@@ -93,6 +96,16 @@ public class EmployeeRepositoryTests {
         // then - verify the output
         Assertions.assertThat(employeeList).isNotNull();
         Assertions.assertThat(employeeList.size()).isEqualTo(2);
+
+        Assertions.assertThat(employeeList.get(0).getFirstName()).isEqualTo("Mohammad");
+        Assertions.assertThat(employeeList.get(0).getLastName()).isEqualTo( "Ranjbar");
+        Assertions.assertThat(employeeList.get(0).getEmail()).isEqualTo("mohammadranjbar@gmail.com");
+
+        // isIn is used to check if a value exists in a set of values. This method checks if a particular value exists in the given set of values.
+        Assertions.assertThat(employeeList.get(1).getFirstName()).isIn("Mohammad","Hossein");
+        Assertions.assertThat(employeeList.get(1).getLastName()).isIn("Aslani", "Ranjbar");
+        Assertions.assertThat(employeeList.get(1).getEmail()).isIn("hosseinaslani@gmail.com", "mohammadranjbar@gmail.com");
+
 
     }
 
@@ -112,6 +125,9 @@ public class EmployeeRepositoryTests {
 
         // then - verify the output
         Assertions.assertThat(getEmployee).isNotNull();
+        Assertions.assertThat(getEmployee.getFirstName()).isEqualTo("Mohammad");
+        Assertions.assertThat(getEmployee.getLastName()).isEqualTo("Ranjbar");
+        Assertions.assertThat(getEmployee.getEmail()).isEqualTo("mohammadranjbar@gmail.com");
 
     }
 
@@ -131,6 +147,8 @@ public class EmployeeRepositoryTests {
 
         // then - verify the output
         Assertions.assertThat(getEmployee).isNotNull();
+        Assertions.assertThat(getEmployee.getFirstName()).isEqualTo("Mohammad");
+        Assertions.assertThat(getEmployee.getLastName()).isEqualTo("Ranjbar");
         Assertions.assertThat(getEmployee.getEmail()).isEqualTo("mohammadranjbar@gmail.com");
 
     }
@@ -191,6 +209,9 @@ public class EmployeeRepositoryTests {
 
         // then - verify the output
         Assertions.assertThat(savedEmployee).isNotNull();
+        Assertions.assertThat(savedEmployee.getFirstName()).isEqualTo("Mohammad");
+        Assertions.assertThat(savedEmployee.getLastName()).isEqualTo("Ranjbar");
+        Assertions.assertThat(savedEmployee.getEmail()).isEqualTo("mohammadranjbar@gmail.com");
 
     }
 
@@ -209,6 +230,9 @@ public class EmployeeRepositoryTests {
 
         // then - verify the output
         Assertions.assertThat(savedEmployee).isNotNull();
+        Assertions.assertThat(savedEmployee.getFirstName()).isEqualTo("Mohammad");
+        Assertions.assertThat(savedEmployee.getLastName()).isEqualTo("Ranjbar");
+        Assertions.assertThat(savedEmployee.getEmail()).isEqualTo("mohammadranjbar@gmail.com");
 
     }
 
@@ -225,6 +249,9 @@ public class EmployeeRepositoryTests {
 
         // then - verify the output
         Assertions.assertThat(savedEmployee).isNotNull();
+        Assertions.assertThat(savedEmployee.getFirstName()).isEqualTo("Mohammad");
+        Assertions.assertThat(savedEmployee.getLastName()).isEqualTo("Ranjbar");
+        Assertions.assertThat(savedEmployee.getEmail()).isEqualTo("mohammadranjbar@gmail.com");
 
     }
 
@@ -241,6 +268,9 @@ public class EmployeeRepositoryTests {
 
         // then - verify the output
         Assertions.assertThat(savedEmployee).isNotNull();
+        Assertions.assertThat(savedEmployee.getFirstName()).isEqualTo("Mohammad");
+        Assertions.assertThat(savedEmployee.getLastName()).isEqualTo("Ranjbar");
+        Assertions.assertThat(savedEmployee.getEmail()).isEqualTo("mohammadranjbar@gmail.com");
 
     }
 
