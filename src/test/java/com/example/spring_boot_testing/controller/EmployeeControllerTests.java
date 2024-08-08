@@ -211,4 +211,29 @@ public class EmployeeControllerTests {
 
     }
 
+    // JUnit test for update employee api (negative scenario)
+    @Test
+    @DisplayName("JUnit test for update employee api (positive scenario)")
+    public void givenUpdatedEmployee_whenUpdateEmployee_thenReturn404() throws Exception {
+
+        // given - precondition or setup
+        long employeeId = 1L;
+        Employee updatedEmployee = Employee.builder()
+                .firstName("Hossein")
+                .lastName("Aslani")
+                .email("hossein@gmail.com")
+                .build();
+        given(employeeService.getEmployeeById(employeeId)).willReturn(null);
+
+        // when - action or the behavior that we are going test
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/api/employees/{id}",employeeId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedEmployee)));
+
+        // then - verify the output
+        response.andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+
+    }
+
 }
