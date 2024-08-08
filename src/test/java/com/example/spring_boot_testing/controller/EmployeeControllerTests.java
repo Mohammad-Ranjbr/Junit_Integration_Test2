@@ -157,4 +157,22 @@ public class EmployeeControllerTests {
 
     }
 
+    // JUnit test for get employee by id api (negative scenario)
+    @Test
+    @DisplayName("JUnit test for get employee by id api (negative scenario)")
+    public void givenInvalidEmployeeId_whenGetEmployeeById_thenReturnEmptyObject() throws Exception {
+
+        // given - precondition or setup
+        long employeeId = 1L;
+        given(employeeService.getEmployeeById(employeeId)).willReturn(null);
+
+        // when - action or the behavior that we are going test
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/api/employees/{id}",employeeId));
+
+        // then - verify the output
+        response.andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+
+    }
+
 }
