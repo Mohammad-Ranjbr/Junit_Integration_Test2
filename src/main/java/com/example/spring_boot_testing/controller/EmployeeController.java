@@ -43,4 +43,17 @@ public class EmployeeController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee, @PathVariable("id") long employeeId){
+         Employee savedEmployee = employeeService.getEmployeeById(employeeId);
+         if(savedEmployee != null){
+             savedEmployee.setFirstName(employee.getFirstName());
+             savedEmployee.setLastName(employee.getLastName());
+             savedEmployee.setEmail(employee.getEmail());
+             return new ResponseEntity<>(employeeService.updateEmployee(employee),HttpStatus.OK);
+         } else {
+             return ResponseEntity.notFound().build();
+         }
+    }
+
 }
