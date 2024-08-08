@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.BDDMockito;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,9 +19,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
-
-import static org.mockito.Mockito.*;
-
 
 // The @WebMvcTest annotation in Spring Boot is specifically designed to test the web layer (controllers).
 // This annotation brings only the dependencies related to the web layer and does not load other layers such as the service layer by default.
@@ -79,7 +76,7 @@ public class EmployeeControllerTests {
         // to work with any value that matches a certain condition instead of a specific value.
         // When using ArgumentMatchers, you must be careful that if you use a matcher in a method, you must use matchers for all arguments,
         // or at least use an equivalent matcher instead of using specific values directly.
-        BDDMockito.given(employeeService.saveEmployee(ArgumentMatchers.any(Employee.class)))
+        given(employeeService.saveEmployee(any(Employee.class)))
                 .willAnswer((invocation) -> invocation.getArgument(0));
 
         // willReturn is perfect for when you need to return a constant value as a response, regardless of what input is given to the method.
@@ -101,7 +98,7 @@ public class EmployeeControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.lastName",CoreMatchers.is(employee.getLastName())))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email",CoreMatchers.is(employee.getEmail())))
                 .andDo(MockMvcResultHandlers.print());
-        verify(employeeService,times(1)).saveEmployee(ArgumentMatchers.any(Employee.class));
+        verify(employeeService,times(1)).saveEmployee(any(Employee.class));
 
     }
 
@@ -122,7 +119,7 @@ public class EmployeeControllerTests {
                 .email("hosseinranjbar@gmail.com")
                 .build();
         List<Employee> employeeList = List.of(employee1,employee2);
-        BDDMockito.given(employeeService.getAllEmployees()).willReturn(employeeList);
+        given(employeeService.getAllEmployees()).willReturn(employeeList);
 
         // when - action or the behavior that we are going test
         ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/api/employees"));

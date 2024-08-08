@@ -4,6 +4,7 @@ import com.example.spring_boot_testing.model.Employee;
 import com.example.spring_boot_testing.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,16 @@ public class EmployeeController {
     @ResponseStatus(HttpStatus.OK)
     public List<Employee> getAllEmployees(){
         return employeeService.getAllEmployees();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") long employeeId){
+        Employee employee = employeeService.getEmployeeById(employeeId);
+        if(employee != null){
+            return new ResponseEntity<>(employee,HttpStatus.OK);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }
