@@ -87,6 +87,9 @@ public class EmployeeServiceTests {
 
         // then - verify the output
         Assertions.assertThat(savedEmployee).isNotNull();
+        Assertions.assertThat(savedEmployee.getFirstName()).isEqualTo("Mohammad");
+        Assertions.assertThat(savedEmployee.getLastName()).isEqualTo("Ranjbar");
+        Assertions.assertThat(savedEmployee.getEmail()).isEqualTo("mohammadranjbar@gmail.com");
 
     }
 
