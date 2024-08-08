@@ -213,7 +213,7 @@ public class EmployeeControllerTests {
 
     // JUnit test for update employee api (negative scenario)
     @Test
-    @DisplayName("JUnit test for update employee api (positive scenario)")
+    @DisplayName("JUnit test for update employee api (negative scenario)")
     public void givenUpdatedEmployee_whenUpdateEmployee_thenReturn404() throws Exception {
 
         // given - precondition or setup
@@ -232,6 +232,24 @@ public class EmployeeControllerTests {
 
         // then - verify the output
         response.andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+
+    }
+
+    // JUnit test for delete employee api
+    @Test
+    @DisplayName("JUnit test for delete employee api")
+    public void givenEmployeeId_whenDeleteEmployee_thenReturn200() throws Exception{
+
+        // given - precondition or setup
+        long employeeId = 1L;
+        willDoNothing().given(employeeService).deleteEmployee(employeeId);
+
+        // when - action or the behavior that we are going test
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.delete("/api/employees/{id}",employeeId));
+
+        // then - verify the output
+        response.andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
 
     }
