@@ -5,7 +5,6 @@ import com.example.spring_boot_testing.repository.EmployeeRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -58,12 +57,11 @@ public class EmployeeControllerITests {
     private EmployeeRepository employeeRepository;
 
     @BeforeEach
-    public void setup(){
+    public void setup() {
         employeeRepository.deleteAll();
     }
 
     @Test
-    @DisplayName("JUnit test for create employee api")
     public void givenEmployeeObject_whenCreateEmployee_thenReturnSavedEmployee() throws Exception {
 
         // given - precondition or setup
@@ -72,6 +70,7 @@ public class EmployeeControllerITests {
                 .lastName("Ranjbar")
                 .email("mohammadranjbar@gmail.com")
                 .build();
+
         // when - action or the behavior that we are going test
         ResultActions response = mockMvc.perform(MockMvcRequestBuilders.post("/api/employees")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -80,14 +79,13 @@ public class EmployeeControllerITests {
         // then - verify the output
         response.andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.firstName", CoreMatchers.is(employee.getFirstName())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName",CoreMatchers.is(employee.getLastName())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email",CoreMatchers.is(employee.getEmail())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName", CoreMatchers.is(employee.getLastName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email", CoreMatchers.is(employee.getEmail())))
                 .andDo(MockMvcResultHandlers.print());
 
     }
 
     @Test
-    @DisplayName("JUnit test for get all employees api")
     public void givenListOfEmployees_whenGetAllEmployees_thenReturnEmployeesList() throws Exception {
 
         // given - precondition or setup
@@ -101,7 +99,7 @@ public class EmployeeControllerITests {
                 .lastName("Ranjbar")
                 .email("hosseinranjbar@gmail.com")
                 .build();
-        List<Employee> employeeList = List.of(employee1,employee2);
+        List<Employee> employeeList = List.of(employee1, employee2);
         employeeRepository.saveAll(employeeList);
 
         // when - action or the behavior that we are going test
@@ -109,13 +107,12 @@ public class EmployeeControllerITests {
 
         // then - verify the output
         response.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.size()",CoreMatchers.is(employeeList.size())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.size()", CoreMatchers.is(employeeList.size())))
                 .andDo(MockMvcResultHandlers.print());
 
     }
 
     @Test
-    @DisplayName("JUnit test for get employee by id api (positive scenario)")
     public void givenEmployeeId_whenGetEmployeeById_thenReturnEmployeeObject() throws Exception {
 
         // given - precondition or setup
@@ -127,19 +124,18 @@ public class EmployeeControllerITests {
         employeeRepository.save(employee);
 
         // when - action or the behavior that we are going test
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/api/employees/{id}",employee.getId()));
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/api/employees/{id}", employee.getId()));
 
         // then - verify the output
         response.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName",CoreMatchers.is(employee.getFirstName())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName",CoreMatchers.is(employee.getLastName())))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.email",CoreMatchers.is(employee.getEmail())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName", CoreMatchers.is(employee.getFirstName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName", CoreMatchers.is(employee.getLastName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email", CoreMatchers.is(employee.getEmail())))
                 .andDo(MockMvcResultHandlers.print());
 
     }
 
     @Test
-    @DisplayName("JUnit test for get employee by id api (negative scenario)")
     public void givenInvalidEmployeeId_whenGetEmployeeById_thenReturnEmptyObject() throws Exception {
 
         // given - precondition or setup
@@ -152,7 +148,68 @@ public class EmployeeControllerITests {
         employeeRepository.save(employee);
 
         // when - action or the behavior that we are going test
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/api/employees/{id}",employeeId));
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/api/employees/{id}", employeeId));
+
+        // then - verify the output
+        response.andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+
+    }
+
+    @Test
+    public void givenUpdatedEmployee_whenUpdateEmployee_thenReturnUpdatedEmployeeObject() throws Exception {
+
+        // given - precondition or setup
+        Employee savedEmployee = Employee.builder()
+                .firstName("Mohammad")
+                .lastName("Ranjbar")
+                .email("mohammadranjbar@gmail.com")
+                .build();
+        employeeRepository.save(savedEmployee);
+
+        Employee updatedEmployee = Employee.builder()
+                .firstName("Hossein")
+                .lastName("Aslani")
+                .email("hossein@gmail.com")
+                .build();
+
+
+        // when - action or the behavior that we are going test
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/api/employees/{id}", savedEmployee.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedEmployee)));
+
+        // then - verify the output
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName", CoreMatchers.is(updatedEmployee.getFirstName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName", CoreMatchers.is(updatedEmployee.getLastName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email", CoreMatchers.is(updatedEmployee.getEmail())))
+                .andDo(MockMvcResultHandlers.print());
+
+    }
+
+    @Test
+    public void givenUpdatedEmployee_whenUpdateEmployee_thenReturn404() throws Exception {
+
+        // given - precondition or setup
+        long employeeId = 1L;
+        Employee savedEmployee = Employee.builder()
+                .firstName("Mohammad")
+                .lastName("Ranjbar")
+                .email("mohammadranjbar@gmail.com")
+                .build();
+        employeeRepository.save(savedEmployee);
+
+        Employee updatedEmployee = Employee.builder()
+                .firstName("Hossein")
+                .lastName("Aslani")
+                .email("hossein@gmail.com")
+                .build();
+
+        // when - action or the behavior that we are going test
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.put("/api/employees/{id}",employeeId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updatedEmployee)));
 
         // then - verify the output
         response.andExpect(MockMvcResultMatchers.status().isNotFound())
