@@ -217,4 +217,24 @@ public class EmployeeControllerITests {
 
     }
 
+    @Test
+    public void givenEmployeeId_whenDeleteEmployee_thenReturn200() throws Exception{
+
+        // given - precondition or setup
+        Employee savedEmployee = Employee.builder()
+                .firstName("Mohammad")
+                .lastName("Ranjbar")
+                .email("mohammadranjbar@gmail.com")
+                .build();
+        employeeRepository.save(savedEmployee);
+
+        // when - action or the behavior that we are going test
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.delete("/api/employees/{id}",savedEmployee.getId()));
+
+        // then - verify the output
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print());
+
+    }
+
 }
