@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -26,6 +27,7 @@ import java.util.List;
 // and you need to provide these dependencies manually for your tests to work properly.
 // Mock objects are usually used for the service layer. For this you can use tools like Mockito.
 @WebMvcTest
+@AutoConfigureMockMvc
 public class EmployeeControllerTests {
 
     // To call Rest Api
