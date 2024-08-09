@@ -114,4 +114,50 @@ public class EmployeeControllerITests {
 
     }
 
+    @Test
+    @DisplayName("JUnit test for get employee by id api (positive scenario)")
+    public void givenEmployeeId_whenGetEmployeeById_thenReturnEmployeeObject() throws Exception {
+
+        // given - precondition or setup
+        Employee employee = Employee.builder()
+                .firstName("Mohammad")
+                .lastName("Ranjbar")
+                .email("mohammadranjbar@gmail.com")
+                .build();
+        employeeRepository.save(employee);
+
+        // when - action or the behavior that we are going test
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/api/employees/{id}",employee.getId()));
+
+        // then - verify the output
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.firstName",CoreMatchers.is(employee.getFirstName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.lastName",CoreMatchers.is(employee.getLastName())))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email",CoreMatchers.is(employee.getEmail())))
+                .andDo(MockMvcResultHandlers.print());
+
+    }
+
+    @Test
+    @DisplayName("JUnit test for get employee by id api (negative scenario)")
+    public void givenInvalidEmployeeId_whenGetEmployeeById_thenReturnEmptyObject() throws Exception {
+
+        // given - precondition or setup
+        long employeeId = 1L;
+        Employee employee = Employee.builder()
+                .firstName("Mohammad")
+                .lastName("Ranjbar")
+                .email("mohammadranjbar@gmail.com")
+                .build();
+        employeeRepository.save(employee);
+
+        // when - action or the behavior that we are going test
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders.get("/api/employees/{id}",employeeId));
+
+        // then - verify the output
+        response.andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andDo(MockMvcResultHandlers.print());
+
+    }
+
 }
