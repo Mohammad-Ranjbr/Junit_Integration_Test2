@@ -43,9 +43,12 @@ import java.util.List;
 // This tool allows you to send simulated HTTP requests (like GET, POST, PUT, etc.) to your controllers and check their results.
 // Because @AutoConfigureMockMvc doesn't initialize the actual server and only loads Spring MVC's controllers and structure,
 // tests run much faster. So, if you want to run your tests faster, you can use this annotation.
+
+// Integration test for controller layer
+
 @AutoConfigureMockMvc
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class EmployeeControllerITests {
+public class EmployeeControllerIT {
 
     @Autowired
     private MockMvc mockMvc;
