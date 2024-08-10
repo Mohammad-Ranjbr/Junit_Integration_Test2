@@ -46,8 +46,19 @@ import java.util.List;
 
 // Integration test for controller layer
 
+// Unit Test: A unit test tests only a specific part of the code (for example, a method or class) in isolation.
+// In this type of testing, dependencies (such as services and repositories) are usually isolated from the real world using mocking.
+// Integration Test: Integration testing involves testing multiple parts of the program at the same time to ensure that
+// these parts work properly with each other. In this type of testing, less mocking is usually used and the actual interaction between layers is tested.
+
+// MockMvc allows you to send HTTP requests directly to controllers without having to start a server.
+// This tool is suitable for unit testing controllers and fast and light integration tests.
+// If you want to run your tests more realistically and test all layers of the application, including the real server, TestRestTemplate is a better choice.
+// This tool allows you to send real HTTP requests to a real server, so your tests will be closer to the real environment.
+// TestRestTemplate is best suited for full end-to-end testing, where you want to see how your application performs in a real environment.
+
+@SpringBootTest
 @AutoConfigureMockMvc
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class EmployeeControllerIT {
 
     @Autowired
@@ -142,7 +153,7 @@ public class EmployeeControllerIT {
     public void givenInvalidEmployeeId_whenGetEmployeeById_thenReturnEmptyObject() throws Exception {
 
         // given - precondition or setup
-        long employeeId = 1L;
+        long employeeId = 10L;
         Employee employee = Employee.builder()
                 .firstName("Mohammad")
                 .lastName("Ranjbar")
@@ -195,7 +206,7 @@ public class EmployeeControllerIT {
     public void givenUpdatedEmployee_whenUpdateEmployee_thenReturn404() throws Exception {
 
         // given - precondition or setup
-        long employeeId = 1L;
+        long employeeId = 10L;
         Employee savedEmployee = Employee.builder()
                 .firstName("Mohammad")
                 .lastName("Ranjbar")
