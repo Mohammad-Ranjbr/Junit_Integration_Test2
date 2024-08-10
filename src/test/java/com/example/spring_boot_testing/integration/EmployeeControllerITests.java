@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -82,10 +84,34 @@ public class EmployeeControllerITests {
 
     // will be started before and stopped after each test method
     @Container
-    private final PostgreSQLContainer postgresqlContainer = new PostgreSQLContainer("postgres:latest")
+    private static final PostgreSQLContainer postgresqlContainer = new PostgreSQLContainer("postgres:latest")
             .withDatabaseName("ems")
             .withUsername("foo")
             .withPassword("secret");
+
+    // The @DynamicPropertySource annotation is used in Spring Boot to dynamically set configuration values during test execution.
+    // This feature is especially useful when you want to automatically and dynamically set configuration
+    // values that depend on the environment or depend on external resources.
+    // In your example, @DynamicPropertySource is used to set database values (such as URL, username and password) dynamically.
+    // These values are taken from a PostgreSQL container started by Testcontainers.
+    // @DynamicPropertySource: This annotation tells Spring Boot that the specified method (dynamicPropertySource) should be called during the test startup
+    // process to set some configuration values dynamically.
+    // DynamicPropertyRegistry: This class provides an interface that allows you to dynamically register Spring configuration values.
+    // registry.add(...): These methods are used to add or overwrite configuration values in the DynamicPropertyRegistry.
+    // For example, registry.add("spring.datasource.url", postgresqlContainer::getJdbcUrl); Sets the value of
+    // spring.datasource.url to the dynamic database URL managed by Testcontainers.
+    // Application: Communication with external sources during testing:
+    // Let's say you've set up a PostgreSQL container for your tests with Testcontainers. Since the database URL, username,
+    // and password may change each time the test is run (because the container may be started on a different port), you need to set these values dynamically.
+    // Automatically set Spring configuration values:
+    // Instead of manually and statically defining these values in application.properties or application.yml,
+    // this code allows Spring Boot to automatically set these values at runtime.
+    @DynamicPropertySource
+    public static void dynamicPropertySource(DynamicPropertyRegistry registry){
+        registry.add("spring.datasource.url", postgresqlContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", postgresqlContainer::getUsername);
+        registry.add("spring.datasource.password",postgresqlContainer::getPassword);
+    }
 
     @Test
     public void givenEmployeeObject_whenCreateEmployee_thenReturnSavedEmployee() throws Exception {
