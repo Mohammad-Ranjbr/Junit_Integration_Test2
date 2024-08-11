@@ -10,16 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
 
@@ -63,10 +58,13 @@ import java.util.List;
 // Integration with other tools: @Testcontainers works well with other Java testing tools like JUnit, Spring Boot, etc.,
 // allowing you to write more complex and complete integration tests.
 
-@Testcontainers
+
+// In this case, we manually perform the life cycle of the container, that's why we can delete the @Testcontainers annotation,
+// because we do it manually, and the @Testcontainers annotation is for the mode that manages the Testcontainers itself.
+
 @SpringBootTest
 @AutoConfigureMockMvc
-public class EmployeeControllerITests {
+public class EmployeeControllerITests extends AbstractionBaseTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -83,11 +81,11 @@ public class EmployeeControllerITests {
     }
 
     // will be started before and stopped after each test method
-    @Container
+    /*@Container
     private static final PostgreSQLContainer postgresqlContainer = new PostgreSQLContainer("postgres:latest")
             .withDatabaseName("ems")
             .withUsername("foo")
-            .withPassword("secret");
+            .withPassword("secret");*/
 
     // The @DynamicPropertySource annotation is used in Spring Boot to dynamically set configuration values during test execution.
     // This feature is especially useful when you want to automatically and dynamically set configuration
@@ -106,20 +104,22 @@ public class EmployeeControllerITests {
     // Automatically set Spring configuration values:
     // Instead of manually and statically defining these values in application.properties or application.yml,
     // this code allows Spring Boot to automatically set these values at runtime.
-    @DynamicPropertySource
+    // Instead of storing configuration values statically in configuration files (such as application.properties), you can set them based on runtime conditions.
+
+    /*@DynamicPropertySource
     public static void dynamicPropertySource(DynamicPropertyRegistry registry){
         registry.add("spring.datasource.url", postgresqlContainer::getJdbcUrl);
         registry.add("spring.datasource.username", postgresqlContainer::getUsername);
         registry.add("spring.datasource.password",postgresqlContainer::getPassword);
-    }
+    }*/
 
     @Test
     public void givenEmployeeObject_whenCreateEmployee_thenReturnSavedEmployee() throws Exception {
 
-        System.out.println("Postgres container database name: " + postgresqlContainer.getDatabaseName());
+        /*System.out.println("Postgres container database name: " + postgresqlContainer.getDatabaseName());
         System.out.println("Postgres container database url: " + postgresqlContainer.getJdbcUrl());
         System.out.println("Postgres container username: " + postgresqlContainer.getUsername());
-        System.out.println("Postgres container password: " + postgresqlContainer.getPassword());
+        System.out.println("Postgres container password: " + postgresqlContainer.getPassword());*/
 
         // given - precondition or setup
         Employee employee = Employee.builder()
