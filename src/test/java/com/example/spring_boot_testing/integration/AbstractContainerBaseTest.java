@@ -10,7 +10,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 // Singleton Container Pattern
 
-public abstract class AbstractionBaseTest {
+public abstract class AbstractContainerBaseTest {
 
     // Advantages of this approach:
     // Reducing code duplication: By using a base class (Base Class) such as AbstractionBaseTest, you can avoid code duplication.
@@ -23,6 +23,12 @@ public abstract class AbstractionBaseTest {
     // High flexibility: If you need to make changes to the database configuration, or PostgreSQL version,
     // you can apply these changes only to the base class, and these changes will be automatically applied to all tests that inherit from this class.
 
+    // Run on class load: The static block is run when the class is first loaded by the JVM.
+    // This loading usually occurs the first time a static member of the class is called, or when an object of the class is instantiated.
+    // Executed only once: Unlike other methods, the static block executes only once,
+    // when the class is loaded. Even if you create multiple objects of the class, the static block is not re-executed.
+    // Access to static fields: The static block can access the static fields of the class and set their values.
+    // This functionality is typically used to perform tasks such as initializing static variables or performing specific configurations.
     static final PostgreSQLContainer POSTGRE_SQL_CONTAINER;
 
     static {

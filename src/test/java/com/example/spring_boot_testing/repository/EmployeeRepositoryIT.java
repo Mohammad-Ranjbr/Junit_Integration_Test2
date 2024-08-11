@@ -1,5 +1,6 @@
 package com.example.spring_boot_testing.repository;
 
+import com.example.spring_boot_testing.integration.AbstractContainerBaseTest;
 import com.example.spring_boot_testing.model.Employee;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class EmployeeRepositoryIT {
+public class EmployeeRepositoryIT extends AbstractContainerBaseTest {
 
     private Employee employee;
     private final EmployeeRepository employeeRepository;
@@ -29,6 +30,7 @@ public class EmployeeRepositoryIT {
 
     @BeforeEach
     public void setup(){
+        employeeRepository.deleteAll();
         employee = Employee.builder()
                 .firstName("Mohammad")
                 .lastName("Ranjbar")

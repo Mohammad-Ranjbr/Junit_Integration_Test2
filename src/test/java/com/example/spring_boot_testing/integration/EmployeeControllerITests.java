@@ -64,7 +64,7 @@ import java.util.List;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class EmployeeControllerITests extends AbstractionBaseTest {
+public class EmployeeControllerITests extends AbstractContainerBaseTest {
 
     @Autowired
     private MockMvc mockMvc;
